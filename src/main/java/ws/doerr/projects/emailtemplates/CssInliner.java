@@ -45,9 +45,11 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsoup.nodes.Comment;
@@ -87,7 +89,7 @@ public class CssInliner {
 
     private final Parser parser;
 
-    private final String version;
+    private final Map<String, String> addMeta = new HashMap<>();
     private final boolean removeComments;
 
     /**
@@ -96,17 +98,17 @@ public class CssInliner {
      * No version meta tag will be added and html comments will not be removed
      */
     public CssInliner() {
-        this("", false);
+        this(Collections.emptyMap(), false);
     }
 
     /**
      * Create an Inliner with properties
      *
-     * @param version version number to add to a version meta tag
+     * @param meta meta tags to add to the template header
      * @param removeComments if true, remove any html comments from the output
      */
-    public CssInliner(String version, boolean removeComments) {
-        this.version = version;
+    public CssInliner(Map<String, String> meta, boolean removeComments) {
+        addMeta.putAll(meta);
         this.removeComments = removeComments;
         parser = Parser.xmlParser();
     }
@@ -207,9 +209,10 @@ public class CssInliner {
         // Inline the styles
         extractAndApplyStyles(doc);
 
-        // Add the version metadata
-        if(!version.isEmpty())
-            doc.head().appendElement("meta").attr("name", "version").attr("content", version);
+        // Add any additional meta tags
+        for(Entry<String, String> meta : addMeta.entrySet()) {
+            doc.head().appendElement("meta").attr("name", meta.getKey()).attr("content", meta.getValue());
+        }
 
         // Gather the metadata
         extractMeta(doc, context);
