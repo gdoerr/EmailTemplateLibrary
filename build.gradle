@@ -1,0 +1,84 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+sourceCompatibility = '1.8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jsoup:jsoup:1.10.1"
+    compile "net.htmlparser.jericho:jericho-html:3.4"
+    compile "net.sourceforge.cssparser:cssparser:0.9.20"
+    compile "com.google.guava:guava:20.0"
+}
+
+group = 'ws.doerr.projects.emailtemplates'
+version = '0.1.0'
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from tasks.javadoc.destinationDir
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives jar
+
+    archives javadocJar
+    archives sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+
+            pom.artifactId = 'EmailTemplateLibrary'
+            pom.version = '0.1.0'
+
+            pom.project {
+                name 'emailtemplates'
+                packaging 'jar'
+                description 'EmailTemplateLibrary is a library for building and maintaining email templates'
+                url 'http://gdoerr.github.io/CssInliner/'
+
+               scm {
+                   url 'scm:git@github.com:gdoerr/EmailTemplates.git'
+                   connection 'scm:git@github.com:gdoerr/EmailTemplates.git'
+                   developerConnection 'scm:git@github.com:gdoerr/EmailTemplates.git'
+               }
+
+               licenses {
+                   license {
+                       name 'MIT'
+                       url 'https://opensource.org/licenses/MIT'
+                       distribution 'repo'
+                   }
+               }
+
+               developers {
+                   developer {
+                       id 'gdoerr56'
+                       name 'Greg Doerr'
+                   }
+               }
+           }
+        }
+    }
+}
