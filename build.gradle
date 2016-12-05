@@ -59,9 +59,9 @@ uploadArchives {
                 url 'http://gdoerr.github.io/CssInliner/'
 
                scm {
-                   url 'scm:git@github.com:gdoerr/EmailTemplates.git'
-                   connection 'scm:git@github.com:gdoerr/EmailTemplates.git'
-                   developerConnection 'scm:git@github.com:gdoerr/EmailTemplates.git'
+                   url 'scm:git@github.com:gdoerr/EmailTemplateLibrary.git'
+                   connection 'scm:git@github.com:gdoerr/EmailTemplateLibrary.git'
+                   developerConnection 'scm:git@github.com:gdoerr/EmailTemplateLibrary.git'
                }
 
                licenses {
