@@ -10,14 +10,15 @@ repositories {
 }
 
 dependencies {
-    compile "org.jsoup:jsoup:1.10.1"
+    //compile "org.jsoup:jsoup:1.10.1"
+    compile "org.jsoup:jsoup:1.9.2"
     compile "net.htmlparser.jericho:jericho-html:3.4"
     compile "net.sourceforge.cssparser:cssparser:0.9.20"
     compile "com.google.guava:guava:20.0"
 }
 
 group = 'ws.doerr.projects.emailtemplates'
-version = '0.1.0'
+version = '0.1.1'
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
@@ -50,7 +51,7 @@ uploadArchives {
             }
 
             pom.artifactId = 'EmailTemplateLibrary'
-            pom.version = '0.1.0'
+            pom.version = version
 
             pom.project {
                 name 'emailtemplates'
