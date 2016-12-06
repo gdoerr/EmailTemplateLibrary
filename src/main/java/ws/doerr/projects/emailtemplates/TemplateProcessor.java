@@ -67,8 +67,19 @@ import org.w3c.dom.css.CSSStyleDeclaration;
 import org.w3c.dom.css.CSSStyleRule;
 import org.w3c.dom.css.CSSStyleSheet;
 
-public class CssInliner {
-    private static final Logger LOG = Logger.getLogger(CssInliner.class.getName());
+/**
+ * HTML Email Template Processor
+ *
+ * Provides an flexible template engine to generate and maintain email templates
+ *
+ * Includes templates, includes with parameters, selective inlining and
+ * HTML minification.
+ *
+ * Templates loosely based on JSF concepts
+ *
+ */
+public class TemplateProcessor {
+    private static final Logger LOG = Logger.getLogger(TemplateProcessor.class.getName());
 
     private static final String STYLE_TAG = "style";
     private static final String LINK_INLINE_ATTR = "ui:inline";
@@ -93,21 +104,21 @@ public class CssInliner {
     private final boolean removeComments;
 
     /**
-     * Create the default Inliner
+     * Create the default Processor
      *
      * No version meta tag will be added and html comments will not be removed
      */
-    public CssInliner() {
+    public TemplateProcessor() {
         this(Collections.emptyMap(), false);
     }
 
     /**
-     * Create an Inliner with properties
+     * Create a processor with properties
      *
      * @param meta meta tags to add to the template header
      * @param removeComments if true, remove any html comments from the output
      */
-    public CssInliner(Map<String, String> meta, boolean removeComments) {
+    public TemplateProcessor(Map<String, String> meta, boolean removeComments) {
         addMeta.putAll(meta);
         this.removeComments = removeComments;
         parser = Parser.xmlParser();
@@ -120,7 +131,7 @@ public class CssInliner {
      * @return the resulting context from the processing operation
      * @throws Exception resulting from the processing of the source
      */
-    public InlinerContext process(final Path source) throws Exception {
+    public ProcessorContext process(final Path source) throws Exception {
         return process(source, null);
     }
 
@@ -131,9 +142,9 @@ public class CssInliner {
      * @return the resulting context from the processing operation
      * @throws Exception resulting from the processing of the source
      */
-    public InlinerContext process(final Path source, final Path destination) throws Exception {
+    public ProcessorContext process(final Path source, final Path destination) throws Exception {
         try (InputStream input = Files.newInputStream(source)) {
-            InlinerContext context = process(input, source.getParent());
+            ProcessorContext context = process(input, source.getParent());
 
             if(destination != null)
                 Files.write(destination, context.getHtml().getBytes(Charsets.UTF_8));
@@ -149,12 +160,12 @@ public class CssInliner {
      * @return the resulting context from the processing operation
      * @throws Exception resulting from the processing of the source
      */
-    public InlinerContext process(final InputStream input, Path relative) throws Exception {
+    public ProcessorContext process(final InputStream input, Path relative) throws Exception {
         // If relative is null, default to the current working directory
         if(relative == null)
             relative = Paths.get(".");
 
-        InlinerContext context = new InlinerContext();
+        ProcessorContext context = new ProcessorContext();
 
         // Parse the source document
         Document doc = Jsoup.parse(
@@ -255,7 +266,7 @@ public class CssInliner {
      * @param doc base parsed template
      * @param meta context to write the meta data to
      */
-    private void extractMeta(Element doc, InlinerContext context) {
+    private void extractMeta(Element doc, ProcessorContext context) {
         doc.getElementsByTag("meta").stream()
                 .filter((element) -> {
                     return element.hasAttr("name") && element.hasAttr("content");
@@ -269,10 +280,10 @@ public class CssInliner {
      * Process any links in the document
      * @param doc base parsed document
      * @param basePath base path for relative referenced includes
-     * @param context Inliner context
+     * @param context processor context
      * @return true if files were included
      */
-    private boolean processLinks(Element doc, String basePath, InlinerContext context) {
+    private boolean processLinks(Element doc, String basePath, ProcessorContext context) {
         boolean processed = false;
 
         for(Element element : doc.getElementsByTag(LINK_TAG)) {

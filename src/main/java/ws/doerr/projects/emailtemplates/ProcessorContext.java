@@ -43,7 +43,7 @@ import java.util.Set;
  *
  * @author greg
  */
-public class InlinerContext {
+public class ProcessorContext {
     private final Set<Dependency> dependencies = new HashSet<>();
     private final Map<String, String> meta = new HashMap<>();
     private String html;
