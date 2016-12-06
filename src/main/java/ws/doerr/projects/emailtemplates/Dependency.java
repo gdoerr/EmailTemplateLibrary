@@ -1,45 +1,37 @@
 /*
- *  **************************************************************************
- *                     Copyright © 2016-2016 Credico USA, LLC
- *                            All Rights Reserved.
- *      ------------------------------------------------------------------
- * 
- *      Credico USA, LLC
- *      525 West Monroe, Suite 900
- *      Chicago, IL 60661
- *      software@credicousa.com
- * 
- *      ------------------------------------------------------------------
- *  Copyright © 2014-2016. Credico USA, LLC. All Rights Reserved.
- *  Permission to use, copy, modify, and distribute this software and its
- *  documentation for educational, research, and not-for-profit purposes,
- *  without fee and without a signed licensing agreement, is hereby granted,
- *  provided that this copyright notice, this paragraph and the following two
- *  paragraphs appear in all copies, modifications, and distributions.
- *  Contact Credico USA, LLC. at software@credicousa.com for
- *  commercial licensing opportunities.
- * 
- *  IN NO EVENT SHALL CREDICO USA, LLC. BE LIABLE TO ANY PARTY FOR DIRECT,
- *  INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST
- *  PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
- *  EVEN IF CREDICO HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
- *  CREDICO USA, LLC. SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
- *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
- *  PARTICULAR PURPOSE. THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY,
- *  PROVIDED HEREUNDER IS PROVIDED "AS IS". CREDICO USA, LLC. HAS NO OBLIGATION
- *  TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *  **************************************************************************
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015-2016 Greg Doerr
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package ws.doerr.projects.emailtemplates;
 
 import java.nio.file.Path;
 
 /**
- *
- * @author greg
+ *  Dependency item for a template
  */
 public class Dependency {
+    /**
+     * Dependency type definitions
+     */
     public enum DependencyType {
         Style,
         StyleInline,

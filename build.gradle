@@ -1,10 +1,9 @@
 plugins {
     id 'org.ajoberstar.grgit' version '1.6.0'
+    id 'java'
+    id 'maven'
+    id 'signing'
 }
-
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'signing'
 
 sourceCompatibility = '1.8'
 compileJava {
@@ -24,7 +23,11 @@ dependencies {
 }
 
 group = 'ws.doerr.projects.emailtemplates'
-//version = '0.3.0'
+version = "${version}"
+
+javadoc {
+    title = "${rootProject.name} - ${version}"
+}
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
@@ -38,9 +41,6 @@ task sourcesJar(type: Jar) {
 
 task extractGit {
     def grgit = org.ajoberstar.grgit.Grgit.open(project.rootDir)
-
-    def headTag = grgit.describe()
-    version = headTag ? headTag : grgit.branch.getCurrent().name
 }
 
 //
@@ -49,20 +49,22 @@ task extractGit {
 jar {
     manifest {
         attributes\
-            'Project': 'Email Template Library',
+            'Project': "${rootProject.name}",
             'Build-By': System.getProperty('user.name'),
             'Build-Date': new Date(),
             'Build-JDK': System.getProperty('java.version'),
             'Build-Host': java.net.InetAddress.getLocalHost().getHostName(),
             'Build-Gradle': GradleVersion.current().toString(),
             'Repo': grgit.remote.list().getAt(0).url ?: '',
-            'Version': grgit.status().clean ? version : 'DEVELOPMENT',
+            'Version': version ?: '',
             'Branch': grgit.status().clean ? grgit.branch.getCurrent().name : 'DEVELOPMENT',
             'CommitId': grgit.status().clean ? grgit.head().id : 'DEVELOPMENT',
             'CommitDate': grgit.status().clean ? grgit.head().date : 'DEVELOPMENT',
             'License': 'MIT'
     }
 }
+
+jar.dependsOn extractGit
 
 artifacts {
     archives jar
